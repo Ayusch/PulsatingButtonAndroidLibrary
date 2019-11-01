@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PulsatingButton">
+        <attr name="pulseDuration" format="integer" />
+        <attr name="horizontalOffset" format="integer" />
+        <attr name="verticalOffset" format="integer" />
+        <attr name="pulseCount" format="integer" />
+        <attr name="buttonColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="text" format="string"/>
+    </declare-styleable>
+</resources>
