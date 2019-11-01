@@ -39,13 +39,13 @@ For Maven:
 <dependency>
   <groupId>com.ayusch.pulsatingbutton</groupId>
   <artifactId>pulsatingbutton</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <type>pom</type>
 </dependency>
 ```
 For Gradle:
 ```
-implementation 'com.ayusch.pulsatingbutton:pulsatingbutton:1.1.0'
+implementation 'com.ayusch.pulsatingbutton:pulsatingbutton:1.1.1'
 ```
 
 

@@ -13,7 +13,7 @@ publish {
 
     def groupProjectID = 'com.ayusch.pulsatingbutton'
     def artifactProjectID = 'pulsatingbutton'
-    def publishVersionID = '1.1.0'
+    def publishVersionID = '1.1.1'
 
     userOrg = 'androidville'
     repoName = 'PulsatingButton'
@@ -21,7 +21,7 @@ publish {
     artifactId = artifactProjectID
     publishVersion = publishVersionID
     desc = 'Android library to display a pulsating (growing & shrinking) button'
-    website = 'https://github.com/Ayusch/PulsatingButton'
+    website = 'https://github.com/Ayusch/PulsatingButtonAndroidLibrary'
 }
 
 
