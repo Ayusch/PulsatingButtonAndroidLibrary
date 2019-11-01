@@ -7,9 +7,12 @@ import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.ViewTreeObserver
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
+import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.pulsating_button.view.*
 
@@ -22,10 +25,9 @@ import kotlinx.android.synthetic.main.pulsating_button.view.*
 
 class PulsatingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : AppCompatButton(context, attrs, defStyleAttr) {
 
-    private var buttonText: CharSequence? = ""
-    private var textColor: Int = ContextCompat.getColor(context, android.R.color.black)
+
     private var buttonColor: Int = ContextCompat.getColor(context, R.color.colorAccent)
     private var verticalOffset: Int = 40
     private var horizontalOffset: Int = 40
@@ -41,9 +43,7 @@ class PulsatingButton @JvmOverloads constructor(
     }
 
     private fun init(context: Context?) {
-        LayoutInflater.from(context).inflate(R.layout.pulsating_button, this, true)
-        setColors()
-        setText(buttonText)
+
     }
 
     private fun parseAttributes(context: Context, attributes: AttributeSet) {
@@ -54,21 +54,25 @@ class PulsatingButton @JvmOverloads constructor(
             this.verticalOffset = attrs.getInt(R.styleable.PulsatingButton_verticalOffset, 4)
             this.horizontalOffset = attrs.getInt(R.styleable.PulsatingButton_horizontalOffset, 4)
             this.repeatCount = attrs.getInt(R.styleable.PulsatingButton_pulseCount, Int.MAX_VALUE)
-            this.buttonColor = attrs.getColor(
-                R.styleable.PulsatingButton_buttonColor,
-                ContextCompat.getColor(context, R.color.colorAccent)
-            )
-            this.textColor = attrs.getColor(
-                R.styleable.PulsatingButton_textColor,
-                ContextCompat.getColor(context, R.color.colorAccent)
-            )
-            this.buttonText = attrs.getText(R.styleable.PulsatingButton_text)
+
         } finally {
             attrs.recycle()
         }
     }
 
     fun startAnimation() {
+        if(viewTreeObserver.isAlive){
+            viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    startAnim(measuredHeight, measuredWidth)
+                }
+            })
+        }
+    }
+
+    private fun startAnim(originalHeight: Int, originalWidth: Int) {
         val verticalAnimator = ValueAnimator.ofInt(0, verticalOffset).apply {
             repeatMode = ValueAnimator.REVERSE
             interpolator = AccelerateDecelerateInterpolator()
@@ -80,22 +84,18 @@ class PulsatingButton @JvmOverloads constructor(
             interpolator = AccelerateDecelerateInterpolator()
             duration = animationDuration.toLong()
         }
-
-        val originalHeight = button.layoutParams.height
-        val originalWidth = button.layoutParams.width
-
         verticalAnimator.addUpdateListener { valueAnimator ->
-            val params = button.layoutParams
+            val params = layoutParams
             val animatedValue = valueAnimator.animatedValue as Int
             params.height = (originalHeight + animatedValue)
-            button.layoutParams = params
+            layoutParams = params
         }
 
         horizontalAnimator.addUpdateListener { valueAnimator ->
-            val params = button.layoutParams
+            val params =  layoutParams
             val animatedValue = valueAnimator.animatedValue as Int
             params.width = (originalWidth + animatedValue)
-            button.layoutParams = params
+            layoutParams = params
         }
 
         if (repeatCount == Int.MAX_VALUE) {
@@ -109,6 +109,7 @@ class PulsatingButton @JvmOverloads constructor(
         set.playTogether(verticalAnimator, horizontalAnimator)
         set.start()
     }
+
 
     fun setHorizontalOffset(horizontalOffset: Int) {
         this.horizontalOffset = horizontalOffset
@@ -124,21 +125,6 @@ class PulsatingButton @JvmOverloads constructor(
 
     fun setAnimationDuration(duration: Int) {
         this.animationDuration = duration
-    }
-
-    private fun setColors() {
-        button.setBackgroundColor(buttonColor)
-        button.setTextColor(textColor)
-    }
-
-    fun setButtonDrawable(drawable: Drawable) {
-        button.background = drawable
-    }
-
-    fun setText(text: CharSequence?) {
-        if (!TextUtils.isEmpty(text)) {
-            button.text = text
-        }
     }
 
     fun stopAnimation() {

@@ -13,7 +13,7 @@ publish {
 
     def groupProjectID = 'com.ayusch.pulsatingbutton'
     def artifactProjectID = 'pulsatingbutton'
-    def publishVersionID = '1.0.0'
+    def publishVersionID = '1.1.0'
 
     userOrg = 'androidville'
     repoName = 'PulsatingButton'
