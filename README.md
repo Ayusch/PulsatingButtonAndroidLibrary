@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
 
 # Download
+[ ![Download](https://api.bintray.com/packages/androidville/PulsatingButton/pulsatingbutton/images/download.svg) ](https://bintray.com/androidville/PulsatingButton/pulsatingbutton/_latestVersion)
 
 For Maven:
 ```
